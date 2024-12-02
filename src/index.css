@@ -168,3 +168,19 @@ form button {
 form button:hover {
   background-color: #0056b3;
 }
+.footer {
+  text-align: center;
+  background-color: #333;
+  padding: 10px;
+}
+
+.footer button {
+  padding: 5px 10px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.footer p {
+  margin: 0;
+  font-weight: bold;
+}
