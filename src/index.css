@@ -1,4 +1,4 @@
-/* General Body Styles */
+
 body {
   font-family: Arial, sans-serif;
   background-color: #121212;
@@ -7,16 +7,15 @@ body {
   padding: 0;
 }
 
-/* Navbar Styles */
 .navbar {
   background-color: #333;
   color: white;
-  padding: 10px 20px; /* Reduced padding for a smaller navbar height */
+  padding: 10px 20px;
   position: sticky;
   top: 0;
   width: 100%;
-  max-width: 1200px; /* Limit the navbar width */
-  margin: 0 auto; /* Center the navbar horizontally */
+  max-width: 1200px;
+  margin: 0 auto;
   z-index: 1000;
   box-sizing: border-box;
 }
@@ -39,24 +38,23 @@ body {
 }
 
 .navbar-item a:hover {
-  color: #28a745; /* Green color for hover effect */
+  color: #28a745;
 }
 
-/* Container to wrap everything with max-width */
+
 .container {
-  width: 90%;  /* Adjust width as per the layout */
-  max-width: 1200px;  /* Optional: Set a maximum width for the content */
-  margin: 0 auto;  /* Center the container */
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
   text-align: center;
 }
 
-/* Movie Section */
 .movie-container {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
   justify-content: center;
-  margin-top: 80px; /* Margin to avoid overlap with navbar */
+  margin-top: 80px;
 }
 
 .movie-item {

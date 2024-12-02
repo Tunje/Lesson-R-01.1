@@ -1,16 +1,14 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; // Import Router, Route, and Routes
-import { CartContext } from './CartContext'; // Import the CartContext to access cart data globally
-import './App.css'; // Make sure the CSS is imported
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { CartContext } from './CartContext';
+import './App.css';
 
 function App() {
-  // Footer Counter State and Functions
   const [count, setCount] = useState(0);
   const increaseCount = () => setCount(count + 1);
   const decreaseCount = () => setCount(count > 0 ? count - 1 : 0); // Prevent going below 0
   const resetCount = () => setCount(0);
 
-  // Theme management
   const storedTheme = localStorage.getItem('themeIndex');
   const [theme, setTheme] = useState(storedTheme ? parseInt(storedTheme) : 0);
   
@@ -56,9 +54,9 @@ function App() {
     localStorage.setItem('themeIndex', theme);
   }, [theme]);
 
-  const applyTheme = themes[theme]; // Apply current theme based on the index
+  const applyTheme = themes[theme];
 
-  // To-do list state and functions
+  
   const [todoList, setTodoList] = useState([]);
   const [newTodo, setNewTodo] = useState('');
 
