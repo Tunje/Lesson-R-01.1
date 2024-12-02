@@ -179,7 +179,30 @@ function App() {
               </ul>
             </div>
           } />
-
+          {/* themes */}
+          <Route path="/themes" element={
+          <div>
+            <h2>Select a Theme</h2>
+            <p>Choose your preferred theme:</p>
+            <div>
+              {themes.map((theme, index) => (
+                <div
+                  key={index}
+                  style={{
+                    backgroundColor: theme.navbar,
+                    color: theme.text,
+                    padding: '10px',
+                    margin: '5px',
+                    cursor: 'pointer'
+                  }}
+                  onClick={() => setTheme(index)}
+                >
+                  Theme {index + 1}
+                </div>
+              ))}
+            </div>
+          </div>
+        } />
           {/* To-Do List Page */}
           <Route path="/todo" element={
             <div>
