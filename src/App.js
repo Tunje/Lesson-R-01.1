@@ -6,16 +6,14 @@ import './App.css'; // Make sure the CSS is imported
 function App() {
   // Footer Counter State and Functions
   const [count, setCount] = useState(0);
-
   const increaseCount = () => setCount(count + 1);
   const decreaseCount = () => setCount(count > 0 ? count - 1 : 0); // Prevent going below 0
   const resetCount = () => setCount(0);
 
-  // Retrieve the selected theme from localStorage or default to 0
+  // Theme management
   const storedTheme = localStorage.getItem('themeIndex');
   const [theme, setTheme] = useState(storedTheme ? parseInt(storedTheme) : 0);
   
-  // Define themes with text color, background color, navbar color, and footer color
   const themes = [
     { navbar: '#ff6f61', footer: '#ffcccb', background: '#ffe4e1', text: '#000' },
     { navbar: '#6fa8dc', footer: '#9fc5e8', background: '#d9eaf7', text: '#000' },
@@ -24,6 +22,7 @@ function App() {
     { navbar: '#8e7cc3', footer: '#b4a7d6', background: '#d9d2e9', text: '#000' },
   ];
 
+  // Movies
   const movies = [
     { id: 1, name: "Raiders of the Lost Lust", price: 15 },
     { id: 2, name: "Fast and Furiously Yours", price: 20 },
@@ -53,12 +52,47 @@ function App() {
     return cart.reduce((total, item) => total + item.price, 0);
   };
 
-  // Update the theme in localStorage whenever the theme changes
   useEffect(() => {
     localStorage.setItem('themeIndex', theme);
   }, [theme]);
 
   const applyTheme = themes[theme]; // Apply current theme based on the index
+
+  // To-do list state and functions
+  const [todoList, setTodoList] = useState([]);
+  const [newTodo, setNewTodo] = useState('');
+
+  const handleAddTodo = () => {
+    if (newTodo.trim()) {
+      setTodoList([...todoList, { id: Date.now(), text: newTodo }]);
+      setNewTodo('');
+    }
+  };
+
+  const moveTodoUp = (index) => {
+    if (index > 0) {
+      const updatedTodos = [...todoList];
+      const temp = updatedTodos[index];
+      updatedTodos[index] = updatedTodos[index - 1];
+      updatedTodos[index - 1] = temp;
+      setTodoList(updatedTodos);
+    }
+  };
+
+  const moveTodoDown = (index) => {
+    if (index < todoList.length - 1) {
+      const updatedTodos = [...todoList];
+      const temp = updatedTodos[index];
+      updatedTodos[index] = updatedTodos[index + 1];
+      updatedTodos[index + 1] = temp;
+      setTodoList(updatedTodos);
+    }
+  };
+
+  const removeTodo = (index) => {
+    const updatedTodos = todoList.filter((_, idx) => idx !== index);
+    setTodoList(updatedTodos);
+  };
 
   return (
     <Router>
@@ -69,7 +103,8 @@ function App() {
             <li className="navbar-item"><a href="/">Shop</a></li>
             <li className="navbar-item"><a href="/cart">Cart ({cart.length})</a></li>
             <li className="navbar-item"><a href="/contact">Contact Us</a></li>
-            <li className="navbar-item"><a href="/themes">Themes</a></li> {/* Link to the themes page */}
+            <li className="navbar-item"><a href="/themes">Themes</a></li>
+            <li className="navbar-item"><a href="/todo">To-Do List</a></li> {/* Link to the to-do list page */}
           </ul>
         </nav>
 
@@ -98,7 +133,7 @@ function App() {
               </div>
             </>
           } />
-          
+
           {/* Cart Page */}
           <Route path="/cart" element={
             <>
@@ -125,18 +160,15 @@ function App() {
               ) : (
                 <p>Your cart is empty.</p>
               )}
-
               {cart.length > 0 && (
-                <>
-                  <div className="cart-summary">
-                    <h3>Total: ${calculateTotal()}</h3>
-                    <button className="buy-button">Buy Now</button>
-                  </div>
-                </>
+                <div className="cart-summary">
+                  <h3>Total: ${calculateTotal()}</h3>
+                  <button className="buy-button">Buy Now</button>
+                </div>
               )}
             </>
           } />
-          
+
           {/* Contact Us Page */}
           <Route path="/contact" element={
             <div>
@@ -147,47 +179,37 @@ function App() {
                 <li>Phone: (123) 456-7890</li>
                 <li>Address: 123 Movie Lane, Hollywood, CA 90210</li>
               </ul>
-              <h3>Contact Form</h3>
-              <form>
-                <label>
-                  Name:
-                  <input type="text" placeholder="Your Name" />
-                </label>
-                <br />
-                <label>
-                  Email:
-                  <input type="email" placeholder="Your Email" />
-                </label>
-                <br />
-                <label>
-                  Message:
-                  <textarea placeholder="Your Message"></textarea>
-                </label>
-                <br />
-                <button type="submit">Send Message</button>
-              </form>
             </div>
           } />
 
-          {/* Themes Page */}
-          <Route path="/themes" element={
+          {/* To-Do List Page */}
+          <Route path="/todo" element={
             <div>
-              <h2>Select a Theme</h2>
-              <div className="theme-selector">
-                {themes.map((themeOption, index) => (
-                  <button 
-                    key={index} 
-                    style={{ backgroundColor: themeOption.navbar, color: themeOption.text }}
-                    onClick={() => setTheme(index)}
-                  >
-                    Theme {index + 1}
-                  </button>
+              <h2>To-Do List</h2>
+              <ul>
+                {todoList.map((todo, index) => (
+                  <li key={todo.id} className="todo-item">
+                    <span>{todo.text}</span>
+                    <button onClick={() => moveTodoUp(index)}>Move Up</button>
+                    <button onClick={() => moveTodoDown(index)}>Move Down</button>
+                    <button onClick={() => removeTodo(index)}>Remove</button>
+                  </li>
                 ))}
+              </ul>
+              <div>
+                <input
+                  type="text"
+                  value={newTodo}
+                  onChange={(e) => setNewTodo(e.target.value)}
+                  placeholder="New task..."
+                />
+                <button onClick={handleAddTodo}>Add Task</button>
               </div>
             </div>
           } />
+
         </Routes>
-        
+
         {/* Footer */}
         <footer className="footer" style={{ backgroundColor: applyTheme.footer, color: '#000' }}>
           <button onClick={increaseCount}>Increase</button>
