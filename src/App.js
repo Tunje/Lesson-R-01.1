@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; // Import Router, Route, and Routes
+import { CartContext } from './CartContext'; // Import the CartContext to access cart data globally
 import './App.css'; // Make sure the CSS is imported
 
 function App() {
@@ -26,14 +27,14 @@ function App() {
     { id: 20, name: "The Devil Wears Nada", price: 29 },
   ];
 
-  const [cart, setCart] = useState([]);
+  const { cart, addToCart, removeFromCart } = useContext(CartContext); // Access cart state and actions from context
 
-  const addToCart = (movie) => {
-    setCart([...cart, movie]);
+  const calculateTotal = () => {
+    return cart.reduce((total, item) => total + item.price, 0);
   };
 
   return (
-    <Router> {/* Wrap the entire app in Router */}
+    <Router>
       <div className="container">
         {/* Navbar */}
         <nav className="navbar">
@@ -56,7 +57,7 @@ function App() {
                     <div
                       className="movie-image"
                       style={{
-                        backgroundImage: `url(/images/${movie.name.replace(/\s+/g, '-').replace(/[^\w\s-]/g, '')}.jpg)`,
+                        backgroundImage: `url(/images/${movie.name.replace(/\s+/g, '-').replace(/[^\w\s-]/g, '')}.jpg)`
                       }}
                     >
                       <div className="movie-overlay">
@@ -81,12 +82,13 @@ function App() {
                       <div
                         className="movie-image"
                         style={{
-                          backgroundImage: `url(/images/${item.name.replace(/\s+/g, '-').replace(/[^\w\s-]/g, '')}.jpg)`,
+                          backgroundImage: `url(/images/${item.name.replace(/\s+/g, '-').replace(/[^\w\s-]/g, '')}.jpg)`
                         }}
                       >
                         <div className="movie-overlay">
                           <h3>{item.name}</h3>
                           <p>Price: ${item.price}</p>
+                          <button onClick={() => removeFromCart(item.id)}>Remove from Cart</button>
                         </div>
                       </div>
                     </li>
@@ -95,14 +97,52 @@ function App() {
               ) : (
                 <p>Your cart is empty.</p>
               )}
+
+              {cart.length > 0 && (
+                <>
+                  <div className="cart-summary">
+                    <h3>Total: ${calculateTotal()}</h3>
+                    <button className="buy-button">Buy Now</button>
+                  </div>
+                </>
+              )}
             </>
           } />
           
           {/* Contact Us Page */}
-          <Route path="/contact" element={<h2>Contact Us</h2>} />
+          <Route path="/contact" element={
+            <div>
+              <h2>Contact Us</h2>
+              <p>If you have any questions or need assistance, please reach out to us using the information below:</p>
+              <ul>
+                <li>Email: <a href="mailto:support@vidfeed.com">support@vidfeed.com</a></li>
+                <li>Phone: (123) 456-7890</li>
+                <li>Address: 123 Movie Lane, Hollywood, CA 90210</li>
+              </ul>
+              <h3>Contact Form</h3>
+              <form>
+                <label>
+                  Name:
+                  <input type="text" placeholder="Your Name" />
+                </label>
+                <br />
+                <label>
+                  Email:
+                  <input type="email" placeholder="Your Email" />
+                </label>
+                <br />
+                <label>
+                  Message:
+                  <textarea placeholder="Your Message"></textarea>
+                </label>
+                <br />
+                <button type="submit">Send Message</button>
+              </form>
+            </div>
+            } />
         </Routes>
       </div>
-    </Router> 
+    </Router>
   );
 }
 

@@ -1,17 +1,12 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import ReactDOM from 'react-dom';
+import App from './App'; // Import your main App component
+import { CartProvider } from './CartContext'; // Import the CartProvider from CartContext
+import './index.css'; // Optional: Import your global styles (if any)
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
+ReactDOM.render(
+  <CartProvider>  {/* Wrap your App component with CartProvider */}
     <App />
-  </React.StrictMode>
+  </CartProvider>,
+  document.getElementById('root')  // This is the root div where your app will be rendered
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
